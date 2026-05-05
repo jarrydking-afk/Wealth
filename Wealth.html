@@ -1,0 +1,1659 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="default" />
+<meta name="apple-mobile-web-app-title" content="Wealth" />
+<meta name="theme-color" content="#1a1a1a" />
+<title>Wealth</title>
+<link rel="apple-touch-icon" href="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 180 180'><rect width='180' height='180' rx='40' fill='%231a1a1a'/><text x='50%25' y='50%25' font-family='Arial' font-size='90' fill='white' text-anchor='middle' dy='.35em' font-weight='600'>W</text></svg>" />
+<link rel="icon" href="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 180 180'><rect width='180' height='180' rx='40' fill='%231a1a1a'/><text x='50%25' y='50%25' font-family='Arial' font-size='90' fill='white' text-anchor='middle' dy='.35em' font-weight='600'>W</text></svg>" />
+<style>
+* { box-sizing: border-box; -webkit-tap-highlight-color: transparent; margin: 0; padding: 0; }
+html, body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  background: #f5f5f3; color: #1a1a1a;
+  -webkit-font-smoothing: antialiased;
+  overscroll-behavior-y: contain;
+  min-height: 100vh;
+}
+@media (prefers-color-scheme: dark) {
+  html, body { background: #0d0d0d; color: #e8e8e8; }
+  .card, .stat-card, .acc-card { background: #1a1a1a !important; border-color: #2a2a2a !important; }
+  .nav-bar { background: rgba(13,13,13,0.95) !important; border-color: #2a2a2a !important; }
+  .nav-tab { color: #888; }
+  .nav-tab.active { color: #fff; }
+  input, select, textarea, button { background: #1a1a1a !important; color: #e8e8e8 !important; border-color: #2a2a2a !important; }
+  .btn-primary { background: #fff !important; color: #1a1a1a !important; border-color: #fff !important; }
+  .quick-cat { background: #1a1a1a !important; border-color: #2a2a2a !important; color: #e8e8e8 !important; }
+  .row { border-bottom-color: #2a2a2a !important; }
+  .modal-inner, .onboard, .onboard-screen { background: #0d0d0d !important; }
+  .onboard-screen h2 { color: #e8e8e8 !important; }
+  .onboard-screen p { color: #aaa !important; }
+  .heat-cell, .heat-empty, .progress { background: #2a2a2a; }
+  .quick-income button { background: #0a3d2a !important; color: #7eddaf !important; border-color: #1d6d4a !important; }
+  .alert-info { background: #0c2638; color: #98c5ed; }
+  .alert-warn { background: #2e1f08; color: #f0c878; }
+  .alert-danger { background: #2e0f0f; color: #e89898; }
+  .alert-success { background: #0a2f20; color: #88d4ae; }
+  .big-go { background: #0a3d2a; color: #7eddaf; }
+  .big-pause { background: #4a3008; color: #f4c97a; }
+  .big-stop { background: #4d1818; color: #f0a4a4; }
+  .section-divider { background: #2a2a2a; }
+  h3 { color: #888; }
+  .muted { color: #888; }
+  .onboard-nav { background: rgba(13,13,13,0.95); border-color: #2a2a2a; }
+  .onboard-progress { background: #2a2a2a; }
+  .onboard-progress-fill { background: #fff; }
+}
+
+body {
+  padding: env(safe-area-inset-top) env(safe-area-inset-right) calc(72px + env(safe-area-inset-bottom)) env(safe-area-inset-left);
+}
+.app { max-width: 480px; margin: 0 auto; padding: 12px 14px 0; }
+
+h1 { font-size: 22px; font-weight: 700; letter-spacing: -0.4px; }
+h2 { font-size: 15px; font-weight: 600; margin-bottom: 8px; letter-spacing: -0.2px; }
+h3 { font-size: 12px; font-weight: 700; margin-bottom: 8px; color: #555; text-transform: uppercase; letter-spacing: 1px; }
+p { line-height: 1.5; font-size: 14px; }
+.muted { color: #777; font-size: 12px; }
+
+.header { display: flex; justify-content: space-between; align-items: flex-start; padding: 8px 0 14px; }
+.header-text h1 small { display: block; color: #777; font-size: 12px; margin-top: 2px; font-weight: 400; }
+.header-date { font-size: 12px; color: #777; text-align: right; }
+
+.nav-bar {
+  position: fixed; bottom: 0; left: 0; right: 0;
+  background: rgba(255,255,255,0.95);
+  backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+  border-top: 0.5px solid #ddd;
+  display: flex; justify-content: space-around;
+  padding: 8px 4px calc(8px + env(safe-area-inset-bottom));
+  z-index: 100;
+}
+.nav-tab {
+  flex: 1; padding: 6px 4px; border: none; background: transparent;
+  font-size: 10px; color: #888; cursor: pointer; border-radius: 8px;
+  display: flex; flex-direction: column; align-items: center; gap: 4px;
+  font-family: inherit; font-weight: 500;
+}
+.nav-tab.active { color: #1a1a1a; font-weight: 700; }
+.nav-tab svg { width: 22px; height: 22px; }
+
+.panel { display: none; padding-bottom: 24px; }
+.panel.active { display: block; animation: fadeIn 0.2s ease; }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: translateY(0); } }
+
+.card { background: #fff; border: 0.5px solid #e0e0e0; border-radius: 14px; padding: 14px 16px; margin-bottom: 12px; }
+
+.big-status { border-radius: 14px; padding: 18px; margin-bottom: 12px; text-align: center; font-weight: 600; }
+.big-go { background: #d4f3e3; color: #075e3f; }
+.big-pause { background: #fce8c4; color: #6b4109; }
+.big-stop { background: #fbd6d6; color: #781d1d; }
+.big-status .label { font-size: 28px; letter-spacing: -0.5px; display: block; line-height: 1.1; }
+.big-status .reason { font-size: 13px; font-weight: 500; opacity: 0.85; margin-top: 6px; }
+
+.row { display: flex; align-items: center; padding: 10px 0; border-bottom: 0.5px solid #eee; gap: 8px; }
+.row:last-child { border-bottom: none; }
+.row-main { flex: 1; min-width: 0; }
+.row-title { font-size: 14px; font-weight: 500; }
+.row-sub { font-size: 11px; color: #888; margin-top: 2px; }
+.row-amt { font-variant-numeric: tabular-nums; font-weight: 600; font-size: 14px; }
+
+.pill { display: inline-block; padding: 3px 10px; border-radius: 999px; font-size: 11px; font-weight: 600; }
+.pill-go { background: #d4f3e3; color: #075e3f; }
+.pill-pause { background: #fce8c4; color: #6b4109; }
+.pill-stop { background: #fbd6d6; color: #781d1d; }
+.pill-info { background: #d8e8fa; color: #0c447c; }
+.pill-neutral { background: #e8e8e6; color: #555; }
+
+input, select, textarea, button {
+  font-family: inherit; font-size: 15px; border-radius: 10px;
+  border: 0.5px solid #d0d0d0; background: #fff;
+  padding: 10px 12px; color: #1a1a1a;
+}
+input:focus, select:focus, textarea:focus { outline: none; border-color: #888; }
+input[type="number"] { -moz-appearance: textfield; }
+input::-webkit-outer-spin-button, input::-webkit-inner-spin-button { -webkit-appearance: none; }
+button { cursor: pointer; font-weight: 500; transition: transform 0.05s; }
+button:active { transform: scale(0.98); }
+.btn-primary { background: #1a1a1a; color: #fff; border-color: #1a1a1a; font-weight: 600; }
+.btn-secondary { background: #fff; color: #1a1a1a; }
+.btn-danger { color: #a32d2d; border-color: #f0a4a4; }
+.btn-full { width: 100%; }
+.btn-row { display: flex; gap: 8px; }
+.btn-row > button { flex: 1; }
+
+.field { display: flex; flex-direction: column; gap: 6px; margin-bottom: 12px; }
+.field label { font-size: 12px; color: #777; font-weight: 500; }
+
+.quick-cats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; margin-bottom: 8px; }
+.quick-cat { padding: 10px 6px; background: #fff; border: 0.5px solid #e0e0e0; border-radius: 10px; font-size: 12px; text-align: center; cursor: pointer; font-weight: 500; }
+.quick-cat.active { background: #1a1a1a !important; color: #fff !important; border-color: #1a1a1a !important; }
+
+.quick-income { display: grid; grid-template-columns: repeat(2, 1fr); gap: 6px; margin-bottom: 12px; }
+.quick-income button { padding: 12px 8px; font-size: 13px; text-align: center; border-radius: 10px; background: #d4f3e3; color: #075e3f; border: 0.5px solid #95d4b3; font-weight: 600; }
+
+.check-row { display: flex; align-items: center; gap: 10px; padding: 10px 0; cursor: pointer; border-bottom: 0.5px solid #eee; font-size: 14px; }
+.check-row:last-child { border-bottom: none; }
+.check-row input[type="checkbox"] { width: 20px; height: 20px; cursor: pointer; flex-shrink: 0; accent-color: #1a1a1a; }
+.check-row.done { color: #999; text-decoration: line-through; }
+
+.heatmap { display: grid; grid-template-columns: repeat(15, 1fr); gap: 3px; margin: 8px 0; }
+.heat-cell { aspect-ratio: 1; border-radius: 3px; background: #e8e8e6; }
+.heat-good { background: #5DCAA5; }
+.heat-ok { background: #FAC775; }
+.heat-bad { background: #F09595; }
+.heat-empty { background: #e8e8e6; }
+
+.progress { height: 8px; background: #e8e8e6; border-radius: 4px; overflow: hidden; margin: 6px 0; }
+.progress-fill { height: 100%; background: #5DCAA5; transition: width 0.4s; }
+.progress-fill.warn { background: #FAC775; }
+.progress-fill.danger { background: #F09595; }
+.progress-fill.gold { background: #BA7517; }
+.progress-fill.purple { background: #8B5FBF; }
+
+.gc-result { border-radius: 12px; padding: 14px; margin-top: 12px; font-size: 14px; line-height: 1.5; }
+.gc-result strong { display: block; font-size: 17px; margin-bottom: 6px; }
+
+.alert { border-radius: 12px; padding: 12px 14px; margin-bottom: 12px; font-size: 13px; line-height: 1.5; border-left: 3px solid; }
+.alert-info { background: #e6f1fb; border-color: #185FA5; color: #042c53; }
+.alert-warn { background: #faeeda; border-color: #BA7517; color: #633806; }
+.alert-danger { background: #fcebeb; border-color: #A32D2D; color: #501313; }
+.alert-success { background: #d4f3e3; border-color: #1D9E75; color: #075e3f; }
+
+.accounts-summary { display: grid; grid-template-columns: 1fr; gap: 8px; margin-bottom: 12px; }
+.acc-card { background: #fff; border-radius: 12px; padding: 12px 14px; border: 0.5px solid #e8e8e8; border-left: 3px solid; cursor: pointer; }
+.acc-card.current { border-left-color: #1a1a1a; }
+.acc-card.revolving { border-left-color: #BA7517; }
+.acc-card.credit { border-left-color: #5DCAA5; }
+.acc-card.buffer { border-left-color: #185FA5; }
+.acc-card.sinking { border-left-color: #8B5FBF; }
+.acc-card .acc-row { display: flex; justify-content: space-between; align-items: center; }
+.acc-card .acc-label { font-size: 11px; color: #777; font-weight: 500; }
+.acc-card .acc-value { font-size: 17px; font-weight: 700; font-variant-numeric: tabular-nums; }
+.acc-card .acc-meta { font-size: 11px; color: #888; margin-top: 2px; }
+
+.timeline { margin: 8px 0; }
+.tl-item { display: flex; gap: 12px; padding: 10px 0; border-bottom: 0.5px solid #eee; }
+.tl-item:last-child { border-bottom: none; }
+.tl-day { flex-shrink: 0; width: 56px; font-size: 11px; color: #888; font-weight: 600; padding-top: 1px; }
+.tl-content { flex: 1; }
+.tl-title { font-size: 14px; font-weight: 500; }
+.tl-amt { font-variant-numeric: tabular-nums; font-weight: 600; }
+.tl-amt.in { color: #1D9E75; }
+.tl-amt.out { color: #A32D2D; }
+
+.modal { position: fixed; inset: 0; background: rgba(0,0,0,0.5); display: none; align-items: flex-end; justify-content: center; z-index: 200; padding: 0; }
+.modal.show { display: flex; animation: fadeIn 0.2s; }
+.modal-inner { background: #fff; border-radius: 18px 18px 0 0; padding: 20px 18px calc(20px + env(safe-area-inset-bottom)); width: 100%; max-width: 480px; max-height: 90vh; overflow-y: auto; animation: slideUp 0.25s ease; }
+@keyframes slideUp { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+.modal-inner h2 { font-size: 17px; margin-bottom: 12px; }
+
+.onboard { position: fixed; inset: 0; z-index: 300; background: #f5f5f3; overflow-y: auto; display: flex; flex-direction: column; }
+.onboard-screen { flex: 1; padding: 32px 24px calc(120px + env(safe-area-inset-bottom)); max-width: 480px; margin: 0 auto; width: 100%; display: none; }
+.onboard-screen.active { display: block; }
+.onboard-step { font-size: 11px; color: #999; font-weight: 600; text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 12px; }
+.onboard-screen h2 { font-size: 26px; line-height: 1.2; margin-bottom: 12px; letter-spacing: -0.5px; font-weight: 700; }
+.onboard-screen p { font-size: 14px; color: #555; margin-bottom: 18px; line-height: 1.55; }
+.onboard-screen .field label { font-size: 13px; }
+.onboard-screen .field input { font-size: 17px; padding: 14px 14px; }
+.onboard-nav { position: fixed; bottom: 0; left: 0; right: 0; padding: 16px 24px calc(16px + env(safe-area-inset-bottom)); background: rgba(245,245,243,0.95); backdrop-filter: blur(10px); border-top: 0.5px solid #e0e0e0; max-width: 480px; margin: 0 auto; display: flex; gap: 8px; }
+.onboard-nav button { flex: 1; padding: 14px; }
+.onboard-progress { position: fixed; top: env(safe-area-inset-top); left: 0; right: 0; height: 3px; background: #e0e0e0; z-index: 301; }
+.onboard-progress-fill { height: 100%; background: #1a1a1a; transition: width 0.3s; }
+
+.toast { position: fixed; bottom: 90px; left: 50%; transform: translateX(-50%); background: #1a1a1a; color: #fff; padding: 10px 18px; border-radius: 999px; font-size: 13px; font-weight: 500; z-index: 250; opacity: 0; transition: opacity 0.25s, transform 0.25s; pointer-events: none; white-space: nowrap; }
+.toast.show { opacity: 1; transform: translateX(-50%) translateY(-4px); }
+
+.spend-item { display: flex; gap: 8px; padding: 8px 0; border-bottom: 0.5px solid #eee; align-items: center; cursor: pointer; }
+.spend-item:last-child { border-bottom: none; }
+.spend-cat { font-size: 13px; flex: 1; }
+.spend-cat .spend-time { font-size: 11px; color: #888; display: block; }
+.spend-amt { font-weight: 600; font-variant-numeric: tabular-nums; font-size: 14px; }
+
+.section-divider { height: 1px; background: #e8e8e6; margin: 16px 0; }
+.detail-row { display: flex; justify-content: space-between; align-items: center; padding: 6px 0; font-size: 13px; }
+.detail-row .detail-label { color: #777; }
+.detail-row .detail-value { font-weight: 600; font-variant-numeric: tabular-nums; }
+</style>
+</head>
+<body>
+
+<div id="onboarding" class="onboard" style="display: none;">
+  <div class="onboard-progress"><div id="ob-progress-fill" class="onboard-progress-fill" style="width: 16.6%;"></div></div>
+
+  <div id="ob-screen-1" class="onboard-screen active">
+    <div class="onboard-step">Step 1 of 6</div>
+    <h2>Welcome.</h2>
+    <p>This app keeps your money plan visible. Six short questions and you're set up.</p>
+    <p>Honest answers matter more than perfect ones. You can change anything later in Settings.</p>
+    <p style="font-style: italic; color: #999; margin-top: 24px; font-size: 13px;">Skip if you'd rather just look around — defaults are loaded.</p>
+  </div>
+
+  <div id="ob-screen-2" class="onboard-screen">
+    <div class="onboard-step">Step 2 of 6 · Your accounts</div>
+    <h2>What's in each account right now?</h2>
+    <p>Your real numbers as of today. Round to the nearest hundred.</p>
+    <div class="field"><label>Current account (cash on hand)</label><input type="number" id="ob-current" placeholder="e.g. -120" /></div>
+    <div class="field"><label>SBSA Revolving Credit (debt)</label><input type="number" id="ob-revolving" placeholder="e.g. 250000" /></div>
+    <div class="field"><label>SBSA Credit Card (debt)</label><input type="number" id="ob-credit" placeholder="e.g. 0" /></div>
+    <div class="field"><label>MarketLink / Buffer savings</label><input type="number" id="ob-buffer" placeholder="e.g. 0" /></div>
+    <div class="field"><label>Sinking fund / irregulars</label><input type="number" id="ob-sinking" placeholder="e.g. 0" /></div>
+  </div>
+
+  <div id="ob-screen-3" class="onboard-screen">
+    <div class="onboard-step">Step 3 of 6 · Your income</div>
+    <h2>When does your salary land?</h2>
+    <p>The day in the month your USD salary converts and arrives.</p>
+    <div class="field"><label>Salary day (1-31)</label><input type="number" id="ob-salary-day" min="1" max="31" placeholder="e.g. 28" /></div>
+    <div class="field"><label>Salary amount (R)</label><input type="number" id="ob-salary-amt" placeholder="e.g. 144000" /></div>
+    <div class="field"><label>Housing allowance (R, lands 1st)</label><input type="number" id="ob-housing" placeholder="e.g. 16000" /></div>
+  </div>
+
+  <div id="ob-screen-4" class="onboard-screen">
+    <div class="onboard-step">Step 4 of 6 · Mom & rent</div>
+    <h2>Mom & the pool.</h2>
+    <p>Mom paid R60k for the pool. She's charging ~R5k/m interest on it. Plan: pay her now from revolving credit — that stops the R5k/m interest and lets her resume paying R16k/m rent immediately.</p>
+    <div class="field"><label>Amount owed to mom for pool</label><input type="number" id="ob-mom-balance" value="60000" /></div>
+    <div class="field"><label>Rent amount mom pays per month</label><input type="number" id="ob-rent-amt" value="16000" /></div>
+    <p style="font-size: 12px; color: #888; margin-top: 8px;">Net effect: avoids ~R30k of mom-interest + R75k of rent flowing 6 months earlier, vs ~R15k extra revolving interest. Net win ≈ +R90k.</p>
+  </div>
+
+  <div id="ob-screen-5" class="onboard-screen">
+    <div class="onboard-step">Step 5 of 6 · Daily check-in</div>
+    <h2>When for the daily check-in?</h2>
+    <p>30 seconds a day. Pick a time that fits your routine — first coffee, lunch, end of work.</p>
+    <div class="field"><label>Reminder time</label><input type="time" id="ob-reminder" value="08:00" /></div>
+    <p style="font-size: 12px; color: #888;">Real push notifications need the app to be open — that's an iOS limitation. The habit of opening the app at the same time each day is what really sticks.</p>
+  </div>
+
+  <div id="ob-screen-6" class="onboard-screen">
+    <div class="onboard-step">Step 6 of 6 · Ready</div>
+    <h2>You're set up.</h2>
+    <p>The app is loaded with your real numbers. From here:</p>
+    <ul style="margin: 16px 0 16px 20px; line-height: 1.7; color: #555; font-size: 14px;">
+      <li>Today tab shows your overall position</li>
+      <li>Spend? helps before any purchase over R500</li>
+      <li>Plan tab tracks the system</li>
+      <li>Trends shows your progress over time</li>
+      <li>Settings is where you adjust numbers later</li>
+    </ul>
+    <p style="font-style: italic; color: #999; font-size: 13px;">If you want to redo onboarding later, you'll find that option in Settings.</p>
+  </div>
+
+  <div class="onboard-nav">
+    <button id="ob-back" class="btn-secondary" style="display: none;">Back</button>
+    <button id="ob-next" class="btn-primary">Next</button>
+  </div>
+</div>
+
+
+<div class="app" id="main-app" style="display: none;">
+
+<header class="header">
+  <div class="header-text">
+    <h1>Wealth<small id="header-sub"></small></h1>
+  </div>
+  <div class="header-date" id="header-date"></div>
+</header>
+
+<div id="salary-banner" style="display: none;"></div>
+<div id="firstday-banner" style="display: none;"></div>
+
+<div id="panel-today" class="panel active">
+  <div id="big-status-container"></div>
+  <h3>Accounts</h3>
+  <div class="accounts-summary" id="accounts-list"></div>
+  <h3 style="margin-top: 18px;">Quick log</h3>
+  <div class="quick-income">
+    <button id="btn-log-income">+ Income</button>
+    <button id="btn-log-spend" style="background: #fce8c4; color: #6b4109; border-color: #d4b66f;">– Spend</button>
+  </div>
+  <div class="card" id="recent-spend-card">
+    <h2>Spending this month</h2>
+    <div id="recent-spend-list"></div>
+  </div>
+  <div id="alerts-container"></div>
+</div>
+
+<div id="panel-check" class="panel">
+  <h3>Should I buy this?</h3>
+  <div class="card">
+    <div class="field"><label>What is it?</label><input type="text" id="gc-item" placeholder="e.g. New work shoes" /></div>
+    <div class="field"><label>How much (R)?</label><input type="number" id="gc-amount" placeholder="e.g. 1500" /></div>
+    <div class="field"><label>Why now?</label>
+      <select id="gc-reason">
+        <option value="0">— pick one —</option>
+        <option value="1">Need — for work / health</option>
+        <option value="2">Replacement — for something broken</option>
+        <option value="3">Want — saw it, like it</option>
+        <option value="4">Treat — reward myself</option>
+        <option value="5">Impulse — felt the urge</option>
+      </select>
+    </div>
+    <div class="field"><label>Have I waited at least a day?</label>
+      <select id="gc-wait">
+        <option value="0">— pick one —</option>
+        <option value="1">Yes, more than 24h since I first wanted it</option>
+        <option value="2">Less than a day</option>
+        <option value="3">Right now</option>
+      </select>
+    </div>
+    <button id="btn-gc-check" class="btn-primary btn-full">Check it</button>
+    <div id="gc-result-out"></div>
+  </div>
+</div>
+
+<div id="panel-plan" class="panel">
+  <div class="card"><h2>Setup tasks</h2><div id="setup-list"></div></div>
+  <div class="card"><h2>Monthly system</h2><p class="muted" style="margin-bottom: 8px;">Recurring tasks each month</p><div id="monthly-list"></div></div>
+  <div class="card"><h2>1st-of-month routine</h2><p class="muted" style="margin-bottom: 8px;">Kenya rent + housing allowance</p><div id="firstday-list"></div></div>
+  <div class="card"><h2>Bills & debit orders</h2><div id="bills-list"></div></div>
+  <div class="card"><h2>Loans & property</h2><div id="property-list"></div></div>
+  <div class="card"><h2>This month timeline</h2><div id="timeline-list" class="timeline"></div></div>
+</div>
+
+<div id="panel-trends" class="panel">
+  <div class="card"><h2>Last 30 days check-ins</h2><p class="muted" style="margin-bottom: 8px;">Green = check-in done. Trend matters more than streaks.</p><div id="heatmap" class="heatmap"></div></div>
+  <div class="card"><h2>Progress</h2><div id="progress-list"></div></div>
+  <div class="card">
+    <h2>Future you (rough)</h2>
+    <div class="field"><label>Monthly to discretionary ETF (from late 2027)</label><input type="range" id="future-etf" min="0" max="50000" value="20000" step="1000" /><div id="future-etf-val" class="muted" style="text-align: right;"></div></div>
+    <div class="field"><label>Years to retirement</label><input type="range" id="future-ret" min="10" max="35" value="26" /><div id="future-ret-val" class="muted" style="text-align: right;"></div></div>
+    <div id="future-result"></div>
+    <p class="muted" style="margin-top: 10px; font-size: 11px;">Rough projection — real return ~5%, conservative. Property + farm + business not included.</p>
+  </div>
+  <div class="card"><h2>Milestones logged</h2><div id="milestones-list"></div></div>
+</div>
+
+<div id="panel-settings" class="panel">
+  <div class="card"><h2>Daily reminder</h2><div class="field"><label>Reminder time</label><input type="time" id="set-reminder-time" /></div></div>
+  <div class="card">
+    <h2>Adjust your numbers</h2>
+    <p class="muted" style="margin-bottom: 8px;">Tap any account on the Today tab to update its balance.</p>
+    <div class="field"><label>Salary amount (R)</label><input type="number" id="set-salary-amt" /></div>
+    <div class="field"><label>Salary day</label><input type="number" id="set-salary-day" min="1" max="31" /></div>
+    <div class="field"><label>Housing allowance (R)</label><input type="number" id="set-housing" /></div>
+    <div class="field"><label>Mom's rent (R/month)</label><input type="number" id="set-rent" /></div>
+    <button id="btn-save-settings" class="btn-primary btn-full">Save changes</button>
+  </div>
+  <div class="card">
+    <h2>Data</h2>
+    <div class="btn-row">
+      <button id="btn-export" class="btn-secondary">Export</button>
+      <button id="btn-import" class="btn-secondary">Import</button>
+    </div>
+    <input type="file" id="import-file" accept="application/json" style="display: none;" />
+    <div style="margin-top: 8px;"><button id="btn-redo-onboarding" class="btn-secondary btn-full">Redo onboarding</button></div>
+    <div style="margin-top: 8px;"><button id="btn-reset-all" class="btn-danger btn-full">Reset everything</button></div>
+  </div>
+  <div class="card">
+    <h2>Reference</h2>
+    <div class="detail-row"><span class="detail-label">SBSA Revolving rate</span><span class="detail-value">~16.5%</span></div>
+    <div class="detail-row"><span class="detail-label">Home loan rate</span><span class="detail-value">~11%</span></div>
+    <div class="detail-row"><span class="detail-label">TFSA limit (2026/27)</span><span class="detail-value">R46,000</span></div>
+    <div class="detail-row"><span class="detail-label">TFSA lifetime cap</span><span class="detail-value">R500,000</span></div>
+    <div class="detail-row"><span class="detail-label">SA tax exemption</span><span class="detail-value">R1.25m</span></div>
+    <div class="detail-row"><span class="detail-label">Sister buyout target</span><span class="detail-value">R4.5m</span></div>
+  </div>
+  <div class="card"><p class="muted" style="font-size: 11px;">Wealth v2. Built locally. Data lives only on this device.</p></div>
+</div>
+
+</div>
+
+<nav class="nav-bar" id="nav-bar" style="display: none;">
+  <button class="nav-tab active" data-panel="today"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12l2-2 7-7 7 7 2 2v9a1 1 0 01-1 1h-5v-7H10v7H5a1 1 0 01-1-1z"/></svg>Today</button>
+  <button class="nav-tab" data-panel="check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M9 12l2 2 4-4"/></svg>Spend?</button>
+  <button class="nav-tab" data-panel="plan"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>Plan</button>
+  <button class="nav-tab" data-panel="trends"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 17l6-6 4 4 8-8"/><path d="M14 7h7v7"/></svg>Trends</button>
+  <button class="nav-tab" data-panel="settings"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 01-2.83 2.83l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 008 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06a1.65 1.65 0 00.33-1.82 1.65 1.65 0 00-1.51-1H2a2 2 0 010-4h.09A1.65 1.65 0 004.6 8a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06a1.65 1.65 0 001.82.33H9a1.65 1.65 0 001-1.51V2a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06a1.65 1.65 0 00-.33 1.82V9a1.65 1.65 0 001.51 1H22a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg>Settings</button>
+</nav>
+
+<div id="modal-spend" class="modal">
+  <div class="modal-inner">
+    <h2 id="spend-modal-title">Log spending</h2>
+    <div class="field"><label>Category</label><div id="spend-cats" class="quick-cats"></div></div>
+    <div class="field"><label>Amount (R)</label><input type="number" id="spend-amount" /></div>
+    <label class="check-row" id="sf-check-row"><input type="checkbox" id="sf-from-sinking" /><span>Pay from sinking fund (irregular expense)</span></label>
+    <div class="btn-row"><button id="btn-spend-cancel" class="btn-secondary">Cancel</button><button id="btn-spend-save" class="btn-primary">Save</button></div>
+    <div id="spend-edit-extra" style="display: none; margin-top: 8px;"><button id="btn-spend-delete" class="btn-danger btn-full">Delete this entry</button></div>
+  </div>
+</div>
+
+<div id="modal-income" class="modal">
+  <div class="modal-inner">
+    <h2>Log income received</h2>
+    <div class="field"><label>Type</label>
+      <div id="income-cats" class="quick-cats" style="grid-template-columns: repeat(2, 1fr);">
+        <button class="quick-cat" data-cat="salary">Salary</button>
+        <button class="quick-cat" data-cat="rent">Mom's rent</button>
+        <button class="quick-cat" data-cat="loan">Loan back</button>
+        <button class="quick-cat" data-cat="housing">Housing</button>
+      </div>
+    </div>
+    <div class="field"><label>Amount (R)</label><input type="number" id="income-amount" /></div>
+    <div class="btn-row"><button id="btn-income-cancel" class="btn-secondary">Cancel</button><button id="btn-income-save" class="btn-primary">Save</button></div>
+  </div>
+</div>
+
+<div id="modal-balance" class="modal">
+  <div class="modal-inner">
+    <h2 id="balance-modal-title">Update balance</h2>
+    <div class="field"><label id="balance-modal-label">Amount (R)</label><input type="number" id="balance-amount" /></div>
+    <div class="btn-row"><button id="btn-balance-cancel" class="btn-secondary">Cancel</button><button id="btn-balance-save" class="btn-primary">Save</button></div>
+  </div>
+</div>
+
+<div id="toast" class="toast"></div>
+
+<script id="app-script">
+// ============================================================================
+// WEALTH APP — STATE & STORAGE
+// ============================================================================
+const STORAGE_KEY = 'wealth_app_v3';
+const CURRENT_VERSION = 3;
+
+const DEFAULT_STATE = {
+  version: CURRENT_VERSION,
+  onboarded: false,
+
+  // Account balances
+  accounts: {
+    current: { balance: -120, label: 'SBSA Current', updatedAt: null },
+    revolving: { balance: 250000, label: 'Revolving Credit', limit: 300000, updatedAt: null },
+    credit: { balance: 0, label: 'Credit Card', limit: 200000, updatedAt: null },
+    buffer: { balance: 0, label: 'MarketLink Buffer', target: 150000, updatedAt: null },
+    sinking: { balance: 0, label: 'Sinking Fund', updatedAt: null },
+  },
+
+  // Income setup
+  salaryAmount: 144000,
+  salaryDay: 28,
+  housingAllowance: 16000,
+  rentFromMom: 16000,
+  loanFromBusiness: 10000,
+
+  // Mom & pool
+  momPoolBalance: 60000, // shrinks as rent is logged each month
+
+  // Buyout fund (Frances)
+  buyoutFund: 3500000,
+  buyoutTarget: 4500000,
+
+  // Logs
+  spendLog: [], // {id, date, category, amount, fromSinking}
+  incomeLog: [], // {id, date, type, amount}
+  checkIns: {}, // {YYYY-MM-DD: 'good'|'ok'|'bad'}
+  milestones: [], // {date, label}
+
+  // Setup tasks (10) - one-time
+  setupTasks: [
+    { id: 1, label: 'Call SBSA — move RCP loan debit to 30th', done: false },
+    { id: 2, label: 'Open EasyEquities account online', done: false },
+    { id: 3, label: 'Open SBSA MarketLink savings', done: false },
+    { id: 4, label: 'Open separate tax savings account', done: false },
+    { id: 5, label: 'Apply to Investec Private Bank', done: false },
+    { id: 6, label: 'Set up 4 automatic transfers on the 6th', done: false },
+    { id: 7, label: 'Save Wealth.html to phone home screen', done: false },
+    { id: 8, label: 'Audit phone subscriptions', done: false },
+    { id: 9, label: 'Tell Frances the plan', done: false },
+    { id: 10, label: 'Talk to mom — agree pool repayment from revolving', done: false },
+    { id: 11, label: 'Pay mom R60k from revolving credit', done: false },
+    { id: 12, label: 'Confirm with mom: R16k rent restarts', done: false },
+  ],
+
+  // Monthly tasks (4) - reset each month
+  monthlyTasks: [
+    { id: 1, label: 'On the 6th: confirm 4 transfers fired', done: false },
+    { id: 2, label: 'On the 28th: confirm salary landed', done: false },
+    { id: 3, label: 'Mid-month: log all spending', done: false },
+    { id: 4, label: 'Month-end: review trends', done: false },
+  ],
+
+  // 1st-of-month tasks (2)
+  firstdayTasks: [
+    { id: 1, label: 'Housing allowance ($1,000) landed', done: false },
+    { id: 2, label: 'Kenya rent paid to landlord', done: false },
+  ],
+
+  // Bills
+  bills: [
+    { id: 1, name: 'Salary', amount: 144000, day: 28, type: 'income', cat: 'salary' },
+    { id: 2, name: 'Housing allowance', amount: 16000, day: 1, type: 'income', cat: 'housing' },
+    { id: 3, name: 'Mom\'s rent', amount: 16000, day: 1, type: 'income', cat: 'rent' },
+    { id: 4, name: 'Loan repayment in', amount: 10000, day: 25, type: 'income', cat: 'loan' },
+    { id: 5, name: 'Kenya rent', amount: 16000, day: 1, type: 'expense', cat: 'rent' },
+    { id: 6, name: 'SBSA Home loan', amount: 26840, day: 30, type: 'expense', cat: 'debt' },
+    { id: 7, name: 'WesBank vehicle', amount: 25347, day: 25, type: 'expense', cat: 'debt' },
+    { id: 8, name: 'Northwood property bond', amount: 3730, day: 1, type: 'expense', cat: 'debt' },
+    { id: 9, name: 'EasyPay utilities (CT)', amount: 2125, day: 7, type: 'expense', cat: 'utility' },
+    { id: 10, name: 'SBSA Revolving min', amount: 7687, day: 30, type: 'expense', cat: 'debt' },
+    { id: 11, name: 'MQ Fin', amount: 4900, day: 1, type: 'expense', cat: 'debt' },
+    { id: 12, name: 'Discovery', amount: 8569, day: 1, type: 'expense', cat: 'insurance' },
+    { id: 13, name: 'Safire', amount: 6852, day: 1, type: 'expense', cat: 'insurance' },
+    { id: 14, name: 'Vodacom', amount: 5135, day: 30, type: 'expense', cat: 'service' },
+    { id: 15, name: 'M-Choice DStv', amount: 1104, day: 1, type: 'expense', cat: 'service' },
+    { id: 16, name: 'Liberty', amount: 377, day: 1, type: 'expense', cat: 'insurance' },
+    { id: 17, name: 'Frances support', amount: 7000, day: 6, type: 'expense', cat: 'support' },
+    { id: 18, name: 'Claude AI', amount: 1600, day: 15, type: 'expense', cat: 'service' },
+  ],
+
+  // Auto-transfers (the 6th moves)
+  autoTransfers: [
+    { id: 1, label: 'R3,000 → MarketLink', amount: 3000, day: 6, done: false },
+    { id: 2, label: 'R3,000 → EasyEquities TFSA', amount: 3000, day: 6, done: false },
+    { id: 3, label: 'R3,500 → Tax savings', amount: 3500, day: 6, done: false },
+    { id: 4, label: 'R12,000 → Revolving extra', amount: 12000, day: 6, done: false },
+  ],
+
+  // Settings
+  reminderTime: '08:00',
+  futureEtf: 20000,
+  futureRetYears: 26,
+
+  // Internal
+  lastMonthRollover: null, // YYYY-MM
+  installHintShown: false,
+};
+
+let state = loadState();
+
+function loadState() {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if (!raw) return JSON.parse(JSON.stringify(DEFAULT_STATE));
+    const parsed = JSON.parse(raw);
+    return deepMerge(JSON.parse(JSON.stringify(DEFAULT_STATE)), parsed);
+  } catch (e) {
+    console.error('Load failed:', e);
+    return JSON.parse(JSON.stringify(DEFAULT_STATE));
+  }
+}
+
+function deepMerge(target, source) {
+  for (const key in source) {
+    if (source[key] && typeof source[key] === 'object' && !Array.isArray(source[key])) {
+      target[key] = deepMerge(target[key] || {}, source[key]);
+    } else {
+      target[key] = source[key];
+    }
+  }
+  return target;
+}
+
+function saveState() {
+  try {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+  } catch (e) {
+    console.error('Save failed:', e);
+    toast('Save failed — storage may be full');
+  }
+}
+
+// ============================================================================
+// HELPERS
+// ============================================================================
+function fmt(n) {
+  if (typeof n !== 'number' || isNaN(n)) return 'R0';
+  const abs = Math.abs(n);
+  const sign = n < 0 ? '-' : '';
+  if (abs >= 1000) return sign + 'R' + Math.round(abs).toLocaleString('en-ZA');
+  return sign + 'R' + abs.toFixed(0);
+}
+
+function fmtBig(n) {
+  if (typeof n !== 'number' || isNaN(n)) return 'R0';
+  const abs = Math.abs(n);
+  const sign = n < 0 ? '-' : '';
+  if (abs >= 1_000_000) return sign + 'R' + (abs / 1_000_000).toFixed(2) + 'm';
+  if (abs >= 1_000) return sign + 'R' + (abs / 1_000).toFixed(1) + 'k';
+  return sign + 'R' + abs.toFixed(0);
+}
+
+function todayKey() {
+  const d = new Date();
+  return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
+}
+
+function thisMonthKey() {
+  const d = new Date();
+  return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0');
+}
+
+function daysUntil(targetDay) {
+  const today = new Date();
+  const day = today.getDate();
+  if (day < targetDay) return targetDay - day;
+  // target is next month
+  const lastOfMonth = new Date(today.getFullYear(), today.getMonth() + 1, 0).getDate();
+  return (lastOfMonth - day) + targetDay;
+}
+
+function spentThisMonth() {
+  const month = thisMonthKey();
+  return state.spendLog
+    .filter(s => s.date && s.date.startsWith(month) && !s.fromSinking)
+    .reduce((sum, s) => sum + (s.amount || 0), 0);
+}
+
+function spentFromSinkingThisMonth() {
+  const month = thisMonthKey();
+  return state.spendLog
+    .filter(s => s.date && s.date.startsWith(month) && s.fromSinking)
+    .reduce((sum, s) => sum + (s.amount || 0), 0);
+}
+
+function discretionaryBudget() {
+  // R5,500/month for normal discretionary (food/coffee/etc)
+  return 5500;
+}
+
+function discretionaryLeft() {
+  return discretionaryBudget() - spentThisMonth();
+}
+
+function statusOverall() {
+  const cur = state.accounts.current.balance;
+  const left = discretionaryLeft();
+  const days = daysUntil(state.salaryDay);
+
+  // RED: in significant overdraft or way over budget
+  if (cur < -2000) return { level: 'stop', label: 'Stop', reason: 'Current account is significantly overdrawn.' };
+  if (left < -1000) return { level: 'stop', label: 'Stop', reason: 'Discretionary budget blown by ' + fmt(-left) + '.' };
+
+  // AMBER: tight
+  if (cur < 1000 && days > 5) return { level: 'pause', label: 'Pause', reason: 'Cash low with ' + days + ' days to salary.' };
+  if (left < 500 && days > 5) return { level: 'pause', label: 'Pause', reason: 'Only ' + fmt(left) + ' discretionary left for ' + days + ' more days.' };
+
+  // GREEN
+  return { level: 'go', label: 'On track', reason: 'Cash flow looks fine.' };
+}
+
+// ============================================================================
+// AUTO-ROLLOVER (when month changes)
+// ============================================================================
+function checkMonthRollover() {
+  const thisMonth = thisMonthKey();
+  if (state.lastMonthRollover === thisMonth) return false;
+
+  if (state.lastMonthRollover) {
+    // It's a real rollover — log a milestone for last month
+    const lastMonth = state.lastMonthRollover;
+    const monthSpend = state.spendLog
+      .filter(s => s.date && s.date.startsWith(lastMonth) && !s.fromSinking)
+      .reduce((sum, s) => sum + (s.amount || 0), 0);
+
+    state.milestones.unshift({
+      date: lastMonth + '-end',
+      label: lastMonth + ': spent ' + fmt(monthSpend) + ' discretionary',
+    });
+
+    // Reset monthly + 1st-day tasks
+    state.monthlyTasks.forEach(t => t.done = false);
+    state.firstdayTasks.forEach(t => t.done = false);
+    state.autoTransfers.forEach(t => t.done = false);
+  }
+
+  state.lastMonthRollover = thisMonth;
+  saveState();
+  return true;
+}
+
+// ============================================================================
+// RENDERING
+// ============================================================================
+function renderHeader() {
+  const today = new Date();
+  const opts = { weekday: 'short', month: 'short', day: 'numeric' };
+  document.getElementById('header-date').textContent = today.toLocaleDateString('en-ZA', opts);
+  const days = daysUntil(state.salaryDay);
+  let sub = '';
+  if (days === 0) sub = 'Salary day!';
+  else if (days <= 3) sub = days + 'd to salary';
+  else if (days <= 7) sub = days + ' days to salary';
+  else sub = days + ' days to salary';
+  document.getElementById('header-sub').textContent = sub;
+}
+
+function renderSalaryBanner() {
+  const banner = document.getElementById('salary-banner');
+  const day = new Date().getDate();
+  const sd = state.salaryDay;
+  if (day === sd || day === sd - 1) {
+    banner.style.display = 'block';
+    banner.innerHTML = `
+      <div class="alert alert-success" style="margin-bottom: 12px;">
+        <strong style="font-size: 14px;">💰 Salary expected ${day === sd ? 'today' : 'tomorrow'}</strong><br>
+        <span style="font-size: 12px;">When it lands, the four 6th-of-month transfers will fire. Tap "+ Income" once it arrives to log.</span>
+      </div>`;
+  } else {
+    banner.style.display = 'none';
+  }
+}
+
+function renderFirstDayBanner() {
+  const banner = document.getElementById('firstday-banner');
+  const day = new Date().getDate();
+  const allDone = state.firstdayTasks.every(t => t.done);
+  if (day === 1 && !allDone) {
+    banner.style.display = 'block';
+    banner.innerHTML = `
+      <div class="alert alert-info" style="margin-bottom: 12px;">
+        <strong style="font-size: 14px;">📅 1st of month — Kenya rent flow</strong><br>
+        <span style="font-size: 12px;">Housing allowance ($1,000) lands today. Wait for it, then pay landlord. <a href="#" id="firstday-jump" style="color: inherit; text-decoration: underline;">Mark progress →</a></span>
+      </div>`;
+    setTimeout(() => {
+      const jump = document.getElementById('firstday-jump');
+      if (jump) jump.onclick = (e) => { e.preventDefault(); switchTab('plan'); };
+    }, 0);
+  } else {
+    banner.style.display = 'none';
+  }
+}
+
+function renderTodayPanel() {
+  // Big status
+  const s = statusOverall();
+  document.getElementById('big-status-container').innerHTML =
+    `<div class="big-status big-${s.level}">
+      <span class="label">${s.label}</span>
+      <span class="reason">${s.reason}</span>
+    </div>`;
+
+  // Accounts
+  const acc = state.accounts;
+  const accList = [
+    { key: 'current', cls: 'current', label: 'Current account', value: acc.current.balance, meta: '' },
+    { key: 'revolving', cls: 'revolving', label: 'Revolving Credit', value: -acc.revolving.balance, meta: 'of R' + acc.revolving.limit.toLocaleString() + ' limit' },
+    { key: 'buffer', cls: 'buffer', label: 'Buffer (MarketLink)', value: acc.buffer.balance, meta: 'target ' + fmtBig(acc.buffer.target) },
+    { key: 'sinking', cls: 'sinking', label: 'Sinking fund', value: acc.sinking.balance, meta: 'irregulars' },
+    { key: 'credit', cls: 'credit', label: 'Credit card', value: -acc.credit.balance, meta: acc.credit.balance === 0 ? 'don\'t tap' : 'of R' + acc.credit.limit.toLocaleString() + ' limit' },
+  ];
+  const html = accList.map(a => `
+    <div class="acc-card ${a.cls}" data-account="${a.key}">
+      <div class="acc-row">
+        <div>
+          <div class="acc-label">${a.label}</div>
+          <div class="acc-meta">${a.meta}</div>
+        </div>
+        <div class="acc-value">${fmt(a.value)}</div>
+      </div>
+    </div>
+  `).join('');
+  document.getElementById('accounts-list').innerHTML = html;
+
+  // Hook up account taps
+  document.querySelectorAll('.acc-card').forEach(card => {
+    card.onclick = () => openBalanceModal(card.dataset.account);
+  });
+
+  // Recent spending
+  renderRecentSpend();
+
+  // Alerts
+  renderAlerts();
+}
+
+function renderRecentSpend() {
+  const month = thisMonthKey();
+  const items = state.spendLog
+    .filter(s => s.date && s.date.startsWith(month))
+    .sort((a, b) => b.date.localeCompare(a.date));
+
+  const total = items.filter(s => !s.fromSinking).reduce((sum, s) => sum + s.amount, 0);
+  const sinkingTotal = items.filter(s => s.fromSinking).reduce((sum, s) => sum + s.amount, 0);
+  const budget = discretionaryBudget();
+  const left = budget - total;
+
+  let header = `<div style="display: flex; justify-content: space-between; margin-bottom: 8px; font-size: 13px;">
+    <span class="muted">Discretionary used: ${fmt(total)} of ${fmt(budget)}</span>
+    <span style="font-weight: 600; color: ${left < 0 ? '#A32D2D' : '#1D9E75'};">${left < 0 ? '−' : ''}${fmt(Math.abs(left))} ${left < 0 ? 'over' : 'left'}</span>
+  </div>`;
+  if (sinkingTotal > 0) {
+    header += `<div class="muted" style="font-size: 12px; margin-bottom: 8px;">Plus ${fmt(sinkingTotal)} from sinking fund (irregulars)</div>`;
+  }
+
+  let listHtml = '';
+  if (items.length === 0) {
+    listHtml = '<p class="muted" style="text-align: center; padding: 12px;">Nothing logged this month.</p>';
+  } else {
+    listHtml = items.slice(0, 8).map(s => {
+      const d = new Date(s.date);
+      const dayLabel = d.toLocaleDateString('en-ZA', { day: 'numeric', month: 'short' });
+      return `<div class="spend-item" data-spend-id="${s.id}">
+        <div class="spend-cat">${s.category}${s.fromSinking ? ' <span class="pill pill-info" style="font-size: 9px;">sinking</span>' : ''}<span class="spend-time">${dayLabel}</span></div>
+        <div class="spend-amt">${fmt(s.amount)}</div>
+      </div>`;
+    }).join('');
+    if (items.length > 8) {
+      listHtml += `<p class="muted" style="text-align: center; padding: 6px; font-size: 11px;">${items.length - 8} more entries this month</p>`;
+    }
+  }
+
+  document.getElementById('recent-spend-list').innerHTML = header + listHtml;
+
+  // Hook up spend item taps to edit
+  document.querySelectorAll('.spend-item').forEach(item => {
+    item.onclick = () => openSpendModal(parseInt(item.dataset.spendId));
+  });
+}
+
+function renderAlerts() {
+  const alerts = [];
+  const cur = state.accounts.current.balance;
+  const days = daysUntil(state.salaryDay);
+
+  if (cur < 0) {
+    alerts.push({ type: 'danger', text: 'Current account in overdraft. Avoid all non-essential spend.' });
+  }
+  if (state.accounts.credit.balance > 0) {
+    alerts.push({ type: 'warn', text: 'Credit card has a balance. Pay down before it grows.' });
+  }
+  if (state.accounts.revolving.balance > 250000 && days > 3) {
+    alerts.push({ type: 'warn', text: 'Revolving credit above plan target. Stay disciplined.' });
+  }
+  if (cur > 5000 && state.accounts.buffer.balance < 5000) {
+    alerts.push({ type: 'info', text: 'Cash positive — consider transferring excess to MarketLink buffer.' });
+  }
+  if (alerts.length === 0) {
+    alerts.push({ type: 'success', text: 'No alerts. Everything\'s tracking.' });
+  }
+
+  document.getElementById('alerts-container').innerHTML = alerts.map(a =>
+    `<div class="alert alert-${a.type}">${a.text}</div>`
+  ).join('');
+}
+
+function renderPlanPanel() {
+  // Setup tasks
+  const setupHtml = state.setupTasks.map(t => `
+    <label class="check-row ${t.done ? 'done' : ''}">
+      <input type="checkbox" ${t.done ? 'checked' : ''} data-task="setup" data-id="${t.id}" />
+      <span>${t.label}</span>
+    </label>
+  `).join('');
+  document.getElementById('setup-list').innerHTML = setupHtml;
+
+  // Monthly
+  const monthlyHtml = state.monthlyTasks.map(t => `
+    <label class="check-row ${t.done ? 'done' : ''}">
+      <input type="checkbox" ${t.done ? 'checked' : ''} data-task="monthly" data-id="${t.id}" />
+      <span>${t.label}</span>
+    </label>
+  `).join('');
+  document.getElementById('monthly-list').innerHTML = monthlyHtml;
+
+  // First-day
+  const firstdayHtml = state.firstdayTasks.map(t => `
+    <label class="check-row ${t.done ? 'done' : ''}">
+      <input type="checkbox" ${t.done ? 'checked' : ''} data-task="firstday" data-id="${t.id}" />
+      <span>${t.label}</span>
+    </label>
+  `).join('');
+  document.getElementById('firstday-list').innerHTML = firstdayHtml;
+
+  // Hook up checkbox events
+  document.querySelectorAll('input[type="checkbox"][data-task]').forEach(cb => {
+    cb.onchange = (e) => {
+      const taskType = cb.dataset.task;
+      const id = parseInt(cb.dataset.id);
+      const list = taskType === 'setup' ? state.setupTasks
+                : taskType === 'monthly' ? state.monthlyTasks
+                : state.firstdayTasks;
+      const t = list.find(x => x.id === id);
+      if (t) {
+        t.done = cb.checked;
+        saveState();
+        cb.parentElement.classList.toggle('done', cb.checked);
+      }
+    };
+  });
+
+  renderBills();
+  renderProperty();
+  renderTimeline();
+}
+
+function renderBills() {
+  const today = new Date().getDate();
+  const sorted = [...state.bills].sort((a, b) => a.day - b.day);
+  const html = sorted.map(b => {
+    let pill;
+    if (b.day < today) pill = '<span class="pill pill-go">Done</span>';
+    else if (b.day === today) pill = '<span class="pill pill-pause">Today</span>';
+    else if (b.day - today <= 3) pill = '<span class="pill pill-stop">In ' + (b.day - today) + 'd</span>';
+    else pill = '<span class="pill pill-neutral">Day ' + b.day + '</span>';
+    const sign = b.type === 'income' ? '+' : '−';
+    const color = b.type === 'income' ? '#1D9E75' : '#1a1a1a';
+    return `<div class="row">
+      <div class="row-main">
+        <div class="row-title">${b.name}</div>
+        <div class="row-sub">${b.cat}</div>
+      </div>
+      <div class="row-amt" style="color: ${color}; min-width: 70px; text-align: right;">${sign}${fmt(b.amount)}</div>
+      <div style="min-width: 60px; text-align: right;">${pill}</div>
+    </div>`;
+  }).join('');
+  document.getElementById('bills-list').innerHTML = html;
+}
+
+function renderProperty() {
+  const acc = state.accounts;
+
+  // Mom & pool
+  const momPaidThisMonth = state.incomeLog
+    .filter(i => i.type === 'rent')
+    .reduce((sum, i) => sum + i.amount, 0);
+  const momPoolRemaining = Math.max(0, state.momPoolBalance - momPaidThisMonth);
+  const momPoolPct = state.momPoolBalance > 0
+    ? Math.min(100, (momPaidThisMonth / state.momPoolBalance) * 100)
+    : 100;
+
+  // Revolving paydown
+  const revPaid = 250000 - acc.revolving.balance;
+  const revPct = (revPaid / 250000) * 100;
+
+  // Buffer
+  const bufPct = (acc.buffer.balance / acc.buffer.target) * 100;
+
+  // Buyout fund
+  const buyoutPct = (state.buyoutFund / state.buyoutTarget) * 100;
+  const yearsToTarget = state.buyoutFund < state.buyoutTarget
+    ? Math.log(state.buyoutTarget / state.buyoutFund) / Math.log(1.08)
+    : 0;
+
+  document.getElementById('property-list').innerHTML = `
+    <div style="margin-bottom: 16px;">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
+        <strong style="font-size: 13px;">Mom & pool (R60k)</strong>
+        <span class="muted" style="font-size: 11px;">${fmt(momPoolRemaining)} left</span>
+      </div>
+      <div class="progress"><div class="progress-fill purple" style="width: ${momPoolPct}%"></div></div>
+      <p class="muted" style="font-size: 11px; margin-top: 4px;">Pay from revolving → stops R5k/m mom-interest → mom resumes R16k rent. Net ≈ +R90k.</p>
+    </div>
+
+    <div style="margin-bottom: 16px;">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
+        <strong style="font-size: 13px;">Revolving paydown</strong>
+        <span class="muted" style="font-size: 11px;">${fmt(acc.revolving.balance)} left</span>
+      </div>
+      <div class="progress"><div class="progress-fill gold" style="width: ${revPct}%"></div></div>
+      <p class="muted" style="font-size: 11px; margin-top: 4px;">Target: zero by Feb 2027. R29,687/m paydown.</p>
+    </div>
+
+    <div style="margin-bottom: 16px;">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
+        <strong style="font-size: 13px;">Buffer build (R150k)</strong>
+        <span class="muted" style="font-size: 11px;">${fmt(acc.buffer.balance)}</span>
+      </div>
+      <div class="progress"><div class="progress-fill" style="width: ${bufPct}%"></div></div>
+      <p class="muted" style="font-size: 11px; margin-top: 4px;">R3,000/m + bonus top-up. Target hit ~mid-2027.</p>
+    </div>
+
+    <div>
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
+        <strong style="font-size: 13px;">Sister buyout fund</strong>
+        <span class="muted" style="font-size: 11px;">${fmtBig(state.buyoutFund)} of ${fmtBig(state.buyoutTarget)}</span>
+      </div>
+      <div class="progress"><div class="progress-fill" style="width: ${buyoutPct}%"></div></div>
+      <p class="muted" style="font-size: 11px; margin-top: 4px;">${yearsToTarget > 0 ? '~' + yearsToTarget.toFixed(1) + ' years to R4.5m at 8%' : 'Target reached.'} Held by Frances, growing.</p>
+    </div>
+  `;
+}
+
+function renderTimeline() {
+  const today = new Date().getDate();
+  const events = [];
+
+  state.bills.forEach(b => {
+    if (b.day >= today - 2) {
+      events.push({ day: b.day, label: b.name, amount: b.amount, type: b.type });
+    }
+  });
+  state.autoTransfers.forEach(t => {
+    if (t.day >= today - 2) {
+      events.push({ day: t.day, label: t.label, amount: t.amount, type: 'transfer' });
+    }
+  });
+
+  events.sort((a, b) => a.day - b.day);
+
+  const html = events.slice(0, 10).map(e => {
+    const dayLabel = e.day === today ? 'Today' : e.day === today + 1 ? 'Tmrw' : 'Day ' + e.day;
+    const amtClass = e.type === 'income' ? 'in' : e.type === 'transfer' ? '' : 'out';
+    const sign = e.type === 'income' ? '+' : e.type === 'transfer' ? '→' : '−';
+    return `<div class="tl-item">
+      <div class="tl-day">${dayLabel}</div>
+      <div class="tl-content">
+        <div class="tl-title">${e.label}</div>
+      </div>
+      <div class="tl-amt ${amtClass}">${sign}${fmt(e.amount)}</div>
+    </div>`;
+  }).join('');
+  document.getElementById('timeline-list').innerHTML = html || '<p class="muted">Nothing else this month.</p>';
+}
+
+function renderTrendsPanel() {
+  // Heatmap (last 30 days)
+  const now = new Date();
+  let heatHtml = '';
+  for (let i = 29; i >= 0; i--) {
+    const d = new Date(now);
+    d.setDate(d.getDate() - i);
+    const key = d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
+    const status = state.checkIns[key];
+    const cls = status === 'good' ? 'heat-good' : status === 'ok' ? 'heat-ok' : status === 'bad' ? 'heat-bad' : 'heat-empty';
+    heatHtml += `<div class="heat-cell ${cls}" title="${key}"></div>`;
+  }
+  document.getElementById('heatmap').innerHTML = heatHtml;
+
+  // Progress
+  const acc = state.accounts;
+  const revPaid = 250000 - acc.revolving.balance;
+  const revPct = Math.max(0, Math.min(100, (revPaid / 250000) * 100));
+  const bufPct = Math.max(0, Math.min(100, (acc.buffer.balance / acc.buffer.target) * 100));
+  const buyoutPct = Math.max(0, Math.min(100, (state.buyoutFund / state.buyoutTarget) * 100));
+
+  document.getElementById('progress-list').innerHTML = `
+    <div style="margin-bottom: 12px;">
+      <div style="display: flex; justify-content: space-between; font-size: 12px; margin-bottom: 4px;">
+        <strong>Revolving paid down</strong>
+        <span>${fmt(revPaid)} of R250,000</span>
+      </div>
+      <div class="progress"><div class="progress-fill gold" style="width: ${revPct}%"></div></div>
+    </div>
+    <div style="margin-bottom: 12px;">
+      <div style="display: flex; justify-content: space-between; font-size: 12px; margin-bottom: 4px;">
+        <strong>Buffer built</strong>
+        <span>${fmt(acc.buffer.balance)} of R150,000</span>
+      </div>
+      <div class="progress"><div class="progress-fill" style="width: ${bufPct}%"></div></div>
+    </div>
+    <div>
+      <div style="display: flex; justify-content: space-between; font-size: 12px; margin-bottom: 4px;">
+        <strong>Buyout fund</strong>
+        <span>${fmtBig(state.buyoutFund)} of ${fmtBig(state.buyoutTarget)}</span>
+      </div>
+      <div class="progress"><div class="progress-fill" style="width: ${buyoutPct}%"></div></div>
+    </div>
+  `;
+
+  // Future projection
+  const etf = state.futureEtf;
+  const years = state.futureRetYears;
+  const monthly = etf;
+  const realReturn = 0.05; // real, after inflation
+  const monthlyReturn = realReturn / 12;
+  const months = years * 12;
+  const futureValue = monthly * (Math.pow(1 + monthlyReturn, months) - 1) / monthlyReturn;
+
+  document.getElementById('future-etf-val').textContent = fmt(etf) + '/m';
+  document.getElementById('future-ret-val').textContent = years + ' years';
+  document.getElementById('future-result').innerHTML = `
+    <div style="background: #f5f5f3; border-radius: 10px; padding: 14px; margin-top: 12px;">
+      <div class="muted" style="font-size: 11px;">In ${years} years, ETF investing alone:</div>
+      <div style="font-size: 24px; font-weight: 700; margin: 4px 0;">${fmtBig(futureValue)}</div>
+      <div class="muted" style="font-size: 11px;">in today's purchasing power, conservative.</div>
+    </div>
+  `;
+
+  // Milestones
+  if (state.milestones.length === 0) {
+    document.getElementById('milestones-list').innerHTML = '<p class="muted">No milestones yet.</p>';
+  } else {
+    document.getElementById('milestones-list').innerHTML = state.milestones.slice(0, 12).map(m =>
+      `<div class="row"><div class="row-main"><div class="row-title">${m.label}</div><div class="row-sub">${m.date}</div></div></div>`
+    ).join('');
+  }
+}
+
+function renderSettingsPanel() {
+  document.getElementById('set-reminder-time').value = state.reminderTime;
+  document.getElementById('set-salary-amt').value = state.salaryAmount;
+  document.getElementById('set-salary-day').value = state.salaryDay;
+  document.getElementById('set-housing').value = state.housingAllowance;
+  document.getElementById('set-rent').value = state.rentFromMom;
+}
+
+function renderAll() {
+  if (!state.onboarded) return;
+  renderHeader();
+  renderSalaryBanner();
+  renderFirstDayBanner();
+  renderTodayPanel();
+  renderPlanPanel();
+  renderTrendsPanel();
+  renderSettingsPanel();
+  // Mark today as a check-in
+  if (!state.checkIns[todayKey()]) {
+    state.checkIns[todayKey()] = 'good';
+    saveState();
+  }
+}
+
+// ============================================================================
+// MODAL: SPEND
+// ============================================================================
+const SPEND_CATS = ['Mbuzi', 'Glovo', 'Java', 'Chandarana', 'Karen Mall', 'Westgate', 'Golf', 'Other'];
+let editingSpendId = null;
+let selectedSpendCat = null;
+
+function openSpendModal(spendId) {
+  editingSpendId = spendId || null;
+  selectedSpendCat = null;
+
+  const modal = document.getElementById('modal-spend');
+  const title = document.getElementById('spend-modal-title');
+  const sfRow = document.getElementById('sf-check-row');
+  const editExtra = document.getElementById('spend-edit-extra');
+
+  // Render category buttons
+  document.getElementById('spend-cats').innerHTML = SPEND_CATS.map(c =>
+    `<button class="quick-cat" data-cat="${c}">${c}</button>`
+  ).join('');
+
+  if (editingSpendId) {
+    const item = state.spendLog.find(s => s.id === editingSpendId);
+    if (item) {
+      title.textContent = 'Edit spending';
+      document.getElementById('spend-amount').value = item.amount;
+      document.getElementById('sf-from-sinking').checked = !!item.fromSinking;
+      selectedSpendCat = item.category;
+      const btn = document.querySelector(`#spend-cats [data-cat="${item.category}"]`);
+      if (btn) btn.classList.add('active');
+      sfRow.style.display = 'flex';
+      editExtra.style.display = 'block';
+    }
+  } else {
+    title.textContent = 'Log spending';
+    document.getElementById('spend-amount').value = '';
+    document.getElementById('sf-from-sinking').checked = false;
+    sfRow.style.display = 'flex';
+    editExtra.style.display = 'none';
+  }
+
+  // Hook up cat buttons
+  document.querySelectorAll('#spend-cats .quick-cat').forEach(btn => {
+    btn.onclick = () => {
+      document.querySelectorAll('#spend-cats .quick-cat').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      selectedSpendCat = btn.dataset.cat;
+    };
+  });
+
+  modal.classList.add('show');
+}
+
+function closeSpendModal() {
+  document.getElementById('modal-spend').classList.remove('show');
+}
+
+function saveSpend() {
+  const amount = parseFloat(document.getElementById('spend-amount').value);
+  const fromSinking = document.getElementById('sf-from-sinking').checked;
+
+  if (!selectedSpendCat || !amount || amount <= 0) {
+    toast('Pick a category and enter an amount');
+    return;
+  }
+
+  if (editingSpendId) {
+    const item = state.spendLog.find(s => s.id === editingSpendId);
+    if (item) {
+      // Reverse old impact
+      if (item.fromSinking) {
+        state.accounts.sinking.balance += item.amount;
+      } else {
+        state.accounts.current.balance += item.amount;
+      }
+      // Apply new
+      item.amount = amount;
+      item.category = selectedSpendCat;
+      item.fromSinking = fromSinking;
+      if (fromSinking) state.accounts.sinking.balance -= amount;
+      else state.accounts.current.balance -= amount;
+    }
+  } else {
+    const newItem = {
+      id: Date.now(),
+      date: todayKey(),
+      category: selectedSpendCat,
+      amount: amount,
+      fromSinking: fromSinking,
+    };
+    state.spendLog.push(newItem);
+    if (fromSinking) state.accounts.sinking.balance -= amount;
+    else state.accounts.current.balance -= amount;
+  }
+
+  saveState();
+  renderTodayPanel();
+  closeSpendModal();
+  toast(editingSpendId ? 'Updated' : 'Logged ' + fmt(amount));
+}
+
+function deleteSpend() {
+  if (!editingSpendId) return;
+  const item = state.spendLog.find(s => s.id === editingSpendId);
+  if (item) {
+    // Reverse impact
+    if (item.fromSinking) state.accounts.sinking.balance += item.amount;
+    else state.accounts.current.balance += item.amount;
+    state.spendLog = state.spendLog.filter(s => s.id !== editingSpendId);
+    saveState();
+    renderTodayPanel();
+    closeSpendModal();
+    toast('Deleted');
+  }
+}
+
+// ============================================================================
+// MODAL: INCOME
+// ============================================================================
+let selectedIncomeCat = null;
+
+function openIncomeModal() {
+  selectedIncomeCat = null;
+  document.querySelectorAll('#income-cats .quick-cat').forEach(b => b.classList.remove('active'));
+  document.getElementById('income-amount').value = '';
+  document.getElementById('modal-income').classList.add('show');
+}
+
+function closeIncomeModal() {
+  document.getElementById('modal-income').classList.remove('show');
+}
+
+function saveIncome() {
+  const amount = parseFloat(document.getElementById('income-amount').value);
+  if (!selectedIncomeCat || !amount || amount <= 0) {
+    toast('Pick a type and enter an amount');
+    return;
+  }
+
+  state.incomeLog.push({
+    id: Date.now(),
+    date: todayKey(),
+    type: selectedIncomeCat,
+    amount: amount,
+  });
+  state.accounts.current.balance += amount;
+
+  // Special: if rent from mom, decrement mom-pool tracker
+  if (selectedIncomeCat === 'rent' && state.momPoolBalance > 0) {
+    state.momPoolBalance = Math.max(0, state.momPoolBalance - amount);
+    if (state.momPoolBalance === 0) {
+      state.milestones.unshift({
+        date: todayKey(),
+        label: '✓ Mom\'s pool R60k fully repaid via rent',
+      });
+    }
+  }
+
+  saveState();
+  renderTodayPanel();
+  closeIncomeModal();
+  toast('+' + fmt(amount) + ' logged');
+}
+
+// ============================================================================
+// MODAL: BALANCE
+// ============================================================================
+let editingAccount = null;
+
+function openBalanceModal(accKey) {
+  editingAccount = accKey;
+  const acc = state.accounts[accKey];
+  if (!acc) return;
+  document.getElementById('balance-modal-title').textContent = 'Update ' + acc.label;
+  const isDebt = accKey === 'revolving' || accKey === 'credit';
+  document.getElementById('balance-modal-label').textContent = isDebt
+    ? 'Amount owed (R)'
+    : 'Current balance (R)';
+  document.getElementById('balance-amount').value = acc.balance;
+  document.getElementById('modal-balance').classList.add('show');
+}
+
+function closeBalanceModal() {
+  document.getElementById('modal-balance').classList.remove('show');
+}
+
+function saveBalance() {
+  const amount = parseFloat(document.getElementById('balance-amount').value);
+  if (isNaN(amount)) {
+    toast('Enter a number');
+    return;
+  }
+  if (!editingAccount) return;
+  state.accounts[editingAccount].balance = amount;
+  state.accounts[editingAccount].updatedAt = todayKey();
+  saveState();
+  renderTodayPanel();
+  closeBalanceModal();
+  toast('Updated');
+}
+
+// ============================================================================
+// GUT-CHECK
+// ============================================================================
+function runGutCheck() {
+  const item = document.getElementById('gc-item').value.trim();
+  const amount = parseFloat(document.getElementById('gc-amount').value);
+  const reason = parseInt(document.getElementById('gc-reason').value);
+  const wait = parseInt(document.getElementById('gc-wait').value);
+  const out = document.getElementById('gc-result-out');
+
+  if (!item || !amount || !reason || !wait) {
+    out.innerHTML = '<div class="gc-result alert-warn"><strong>Fill it all in</strong> Need item, amount, reason, and how long you\'ve waited.</div>';
+    return;
+  }
+
+  let verdict, why, cls;
+
+  if (amount < 500) {
+    verdict = 'Just buy it';
+    why = 'Below R500 — no gut-check needed. Log it on the Today tab and move on.';
+    cls = 'alert-success';
+  } else if (reason <= 2) {
+    // Need or replacement
+    if (amount < 5000) {
+      verdict = 'Buy it';
+      why = 'Need or replacement under R5k. Log it. Make sure the cheapest version that does the job is what you\'re buying.';
+      cls = 'alert-success';
+    } else {
+      verdict = 'Buy it — but pay from sinking fund';
+      why = 'Genuine need over R5k. This is what the sinking fund is for. Tag it as "from sinking" when you log.';
+      cls = 'alert-info';
+    }
+  } else if (reason === 3 && wait === 1 && amount < 3000) {
+    verdict = 'Probably fine';
+    why = 'A "want" you\'ve waited more than a day for, under R3k. Log it from discretionary. Don\'t make this a weekly habit.';
+    cls = 'alert-info';
+  } else if (reason === 5 || wait === 3) {
+    verdict = 'Sleep on it';
+    why = 'Impulse, or "right now" energy. Close this tab. If you still want it tomorrow morning, come back.';
+    cls = 'alert-warn';
+  } else if (amount >= 5000) {
+    verdict = 'Sleep on it — minimum 48 hours';
+    why = 'Significant amount. Sleep on it. Talk to Frances. If still wanted in 2 days, use the sinking fund.';
+    cls = 'alert-warn';
+  } else {
+    verdict = 'Wait at least a day';
+    why = 'A want you haven\'t fully waited on. Come back in 24 hours. Most "wants" disappear.';
+    cls = 'alert-warn';
+  }
+
+  out.innerHTML = `<div class="gc-result ${cls}">
+    <strong>${verdict}</strong>
+    ${why}
+  </div>`;
+}
+
+// ============================================================================
+// ONBOARDING
+// ============================================================================
+let obStep = 1;
+const OB_TOTAL = 6;
+
+function showOnboarding() {
+  document.getElementById('main-app').style.display = 'none';
+  document.getElementById('nav-bar').style.display = 'none';
+  document.getElementById('onboarding').style.display = 'flex';
+  obStep = 1;
+  showOnboardScreen();
+}
+
+function showOnboardScreen() {
+  document.querySelectorAll('.onboard-screen').forEach(s => s.classList.remove('active'));
+  document.getElementById('ob-screen-' + obStep).classList.add('active');
+  document.getElementById('ob-progress-fill').style.width = (obStep / OB_TOTAL * 100) + '%';
+  document.getElementById('ob-back').style.display = obStep > 1 ? 'block' : 'none';
+  const next = document.getElementById('ob-next');
+  next.textContent = obStep === OB_TOTAL ? 'Get started' : 'Next';
+}
+
+function obNext() {
+  // Save data from current screen before advancing
+  if (obStep === 2) {
+    const cur = document.getElementById('ob-current').value;
+    const rev = document.getElementById('ob-revolving').value;
+    const cred = document.getElementById('ob-credit').value;
+    const buf = document.getElementById('ob-buffer').value;
+    const sink = document.getElementById('ob-sinking').value;
+    if (cur !== '') state.accounts.current.balance = parseFloat(cur);
+    if (rev !== '') state.accounts.revolving.balance = parseFloat(rev);
+    if (cred !== '') state.accounts.credit.balance = parseFloat(cred);
+    if (buf !== '') state.accounts.buffer.balance = parseFloat(buf);
+    if (sink !== '') state.accounts.sinking.balance = parseFloat(sink);
+  } else if (obStep === 3) {
+    const sd = document.getElementById('ob-salary-day').value;
+    const sa = document.getElementById('ob-salary-amt').value;
+    const ha = document.getElementById('ob-housing').value;
+    if (sd !== '') state.salaryDay = parseInt(sd);
+    if (sa !== '') state.salaryAmount = parseFloat(sa);
+    if (ha !== '') state.housingAllowance = parseFloat(ha);
+  } else if (obStep === 4) {
+    const mb = document.getElementById('ob-mom-balance').value;
+    const ra = document.getElementById('ob-rent-amt').value;
+    if (mb !== '') state.momPoolBalance = parseFloat(mb);
+    if (ra !== '') state.rentFromMom = parseFloat(ra);
+  } else if (obStep === 5) {
+    const r = document.getElementById('ob-reminder').value;
+    if (r) state.reminderTime = r;
+  }
+
+  if (obStep === OB_TOTAL) {
+    state.onboarded = true;
+    saveState();
+    document.getElementById('onboarding').style.display = 'none';
+    document.getElementById('main-app').style.display = 'block';
+    document.getElementById('nav-bar').style.display = 'flex';
+    renderAll();
+    return;
+  }
+
+  obStep++;
+  showOnboardScreen();
+}
+
+function obBack() {
+  if (obStep > 1) { obStep--; showOnboardScreen(); }
+}
+
+function prefillOnboarding() {
+  document.getElementById('ob-current').value = state.accounts.current.balance;
+  document.getElementById('ob-revolving').value = state.accounts.revolving.balance;
+  document.getElementById('ob-credit').value = state.accounts.credit.balance;
+  document.getElementById('ob-buffer').value = state.accounts.buffer.balance;
+  document.getElementById('ob-sinking').value = state.accounts.sinking.balance;
+  document.getElementById('ob-salary-day').value = state.salaryDay;
+  document.getElementById('ob-salary-amt').value = state.salaryAmount;
+  document.getElementById('ob-housing').value = state.housingAllowance;
+  document.getElementById('ob-mom-balance').value = state.momPoolBalance;
+  document.getElementById('ob-rent-amt').value = state.rentFromMom;
+  document.getElementById('ob-reminder').value = state.reminderTime;
+}
+
+// ============================================================================
+// TABS
+// ============================================================================
+function switchTab(name) {
+  document.querySelectorAll('.nav-tab').forEach(t => t.classList.toggle('active', t.dataset.panel === name));
+  document.querySelectorAll('.panel').forEach(p => p.classList.toggle('active', p.id === 'panel-' + name));
+}
+
+// ============================================================================
+// DATA I/O
+// ============================================================================
+function exportData() {
+  const blob = new Blob([JSON.stringify(state, null, 2)], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'wealth-backup-' + todayKey() + '.json';
+  a.click();
+  URL.revokeObjectURL(url);
+  toast('Exported');
+}
+
+function importData(file) {
+  const reader = new FileReader();
+  reader.onload = (e) => {
+    try {
+      const data = JSON.parse(e.target.result);
+      state = deepMerge(JSON.parse(JSON.stringify(DEFAULT_STATE)), data);
+      saveState();
+      renderAll();
+      toast('Imported');
+    } catch (err) {
+      toast('Import failed — bad file');
+    }
+  };
+  reader.readAsText(file);
+}
+
+function resetAll() {
+  if (!confirm('Wipe all data and start over? This cannot be undone.')) return;
+  localStorage.removeItem(STORAGE_KEY);
+  state = JSON.parse(JSON.stringify(DEFAULT_STATE));
+  showOnboarding();
+}
+
+function redoOnboarding() {
+  state.onboarded = false;
+  saveState();
+  prefillOnboarding();
+  showOnboarding();
+}
+
+// ============================================================================
+// TOAST
+// ============================================================================
+let toastTimer = null;
+function toast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  if (toastTimer) clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => t.classList.remove('show'), 1800);
+}
+
+// ============================================================================
+// SETUP / EVENT BINDING
+// ============================================================================
+function setupEvents() {
+  // Tabs
+  document.querySelectorAll('.nav-tab').forEach(t => {
+    t.onclick = () => switchTab(t.dataset.panel);
+  });
+
+  // Quick log buttons
+  document.getElementById('btn-log-income').onclick = openIncomeModal;
+  document.getElementById('btn-log-spend').onclick = () => openSpendModal(null);
+
+  // Spend modal
+  document.getElementById('btn-spend-cancel').onclick = closeSpendModal;
+  document.getElementById('btn-spend-save').onclick = saveSpend;
+  document.getElementById('btn-spend-delete').onclick = deleteSpend;
+
+  // Income modal
+  document.getElementById('btn-income-cancel').onclick = closeIncomeModal;
+  document.getElementById('btn-income-save').onclick = saveIncome;
+  document.querySelectorAll('#income-cats .quick-cat').forEach(btn => {
+    btn.onclick = () => {
+      document.querySelectorAll('#income-cats .quick-cat').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      selectedIncomeCat = btn.dataset.cat;
+      // Pre-fill amount
+      const map = { salary: state.salaryAmount, rent: state.rentFromMom, loan: state.loanFromBusiness, housing: state.housingAllowance };
+      if (map[selectedIncomeCat]) {
+        document.getElementById('income-amount').value = map[selectedIncomeCat];
+      }
+    };
+  });
+
+  // Balance modal
+  document.getElementById('btn-balance-cancel').onclick = closeBalanceModal;
+  document.getElementById('btn-balance-save').onclick = saveBalance;
+
+  // Gut-check
+  document.getElementById('btn-gc-check').onclick = runGutCheck;
+
+  // Future projection sliders
+  document.getElementById('future-etf').oninput = (e) => {
+    state.futureEtf = parseInt(e.target.value);
+    saveState();
+    renderTrendsPanel();
+  };
+  document.getElementById('future-ret').oninput = (e) => {
+    state.futureRetYears = parseInt(e.target.value);
+    saveState();
+    renderTrendsPanel();
+  };
+
+  // Settings save
+  document.getElementById('btn-save-settings').onclick = () => {
+    state.reminderTime = document.getElementById('set-reminder-time').value;
+    state.salaryAmount = parseFloat(document.getElementById('set-salary-amt').value) || state.salaryAmount;
+    state.salaryDay = parseInt(document.getElementById('set-salary-day').value) || state.salaryDay;
+    state.housingAllowance = parseFloat(document.getElementById('set-housing').value) || state.housingAllowance;
+    state.rentFromMom = parseFloat(document.getElementById('set-rent').value) || state.rentFromMom;
+    saveState();
+    renderAll();
+    toast('Saved');
+  };
+
+  // Data buttons
+  document.getElementById('btn-export').onclick = exportData;
+  document.getElementById('btn-import').onclick = () => document.getElementById('import-file').click();
+  document.getElementById('import-file').onchange = (e) => {
+    if (e.target.files[0]) importData(e.target.files[0]);
+  };
+  document.getElementById('btn-reset-all').onclick = resetAll;
+  document.getElementById('btn-redo-onboarding').onclick = redoOnboarding;
+
+  // Onboarding
+  document.getElementById('ob-next').onclick = obNext;
+  document.getElementById('ob-back').onclick = obBack;
+
+  // Modals: click outside to close
+  document.querySelectorAll('.modal').forEach(m => {
+    m.onclick = (e) => { if (e.target === m) m.classList.remove('show'); };
+  });
+
+  // Save on visibility change
+  document.addEventListener('visibilitychange', () => {
+    if (document.visibilityState === 'hidden') saveState();
+  });
+  window.addEventListener('beforeunload', saveState);
+}
+
+// ============================================================================
+// INIT
+// ============================================================================
+function init() {
+  setupEvents();
+  checkMonthRollover();
+
+  if (!state.onboarded) {
+    prefillOnboarding();
+    showOnboarding();
+  } else {
+    document.getElementById('main-app').style.display = 'block';
+    document.getElementById('nav-bar').style.display = 'flex';
+    renderAll();
+  }
+}
+
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', init);
+} else {
+  init();
+}
+
+</script>
+
+</body>
+</html>
